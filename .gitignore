@@ -38,3 +38,9 @@ desktop.ini
 # ── LOGS ──────────────────────────────────────────
 *.log
 npm-debug.log*
+
+# ── DOCUMENTOS ──────────────────────────────────────────
+# Documentos Word - solo entrega local, no en repositorio
+*.docx
+*.doc
+*.pdf

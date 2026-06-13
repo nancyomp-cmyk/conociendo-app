@@ -1,0 +1,103 @@
+=====================================================
+ ENDPOINTS - API REST Conociendo.com
+ Evidencia: GA8-220501096-AA1-EV01
+ Aprendiz: Nancy Mosquera
+ Tecnologia: Laravel 11 + PHP 8.2 + MySQL 8.4
+ URL BASE: http://localhost:8000/api
+=====================================================
+
+━━━━ MODULO AUTENTICACION ━━━━━━━━━━━━━━━━━━━━━━━
+
+ENDPOINT 1 - Estado del servicio
+  Metodo : GET
+  URL    : http://localhost:8000/api/auth/estado
+  HTTP   : 200 OK
+
+ENDPOINT 2 - Registrar usuario
+  Metodo : POST
+  URL    : http://localhost:8000/api/auth/registro
+  Body   : { "nombre": "...", "email": "...", "password": "..." }
+  HTTP   : 201 Created / 409 Conflict
+
+ENDPOINT 3 - Iniciar sesion
+  Metodo : POST
+  URL    : http://localhost:8000/api/auth/login
+  Body   : { "email": "...", "password": "..." }
+  HTTP   : 200 OK / 401 Unauthorized
+
+━━━━ MODULO DESTINOS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ENDPOINT 4 - Listar destinos activos
+  Metodo : GET
+  URL    : http://localhost:8000/api/destinos
+  HTTP   : 200 OK
+
+ENDPOINT 5 - Ver destino por ID
+  Metodo : GET
+  URL    : http://localhost:8000/api/destinos/{id}
+  HTTP   : 200 OK / 404 Not Found
+
+ENDPOINT 6 - Crear destino
+  Metodo : POST
+  URL    : http://localhost:8000/api/destinos
+  Body   : { "nombre":"...", "descripcion":"...", "pais":"...",
+             "ciudad":"...", "precio":000000, "categoria":"..." }
+  HTTP   : 201 Created / 400 Bad Request
+
+ENDPOINT 7 - Actualizar destino
+  Metodo : PUT
+  URL    : http://localhost:8000/api/destinos/{id}
+  Body   : (mismos campos que crear)
+  HTTP   : 200 OK / 404 Not Found
+
+ENDPOINT 8 - Eliminar destino
+  Metodo : DELETE
+  URL    : http://localhost:8000/api/destinos/{id}
+  HTTP   : 200 OK / 404 Not Found
+
+━━━━ MODULO RESERVAS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ENDPOINT 9 - Listar todas las reservas
+  Metodo : GET
+  URL    : http://localhost:8000/api/reservas
+  HTTP   : 200 OK
+
+ENDPOINT 10 - Ver reserva por ID
+  Metodo : GET
+  URL    : http://localhost:8000/api/reservas/{id}
+  HTTP   : 200 OK / 404 Not Found
+
+ENDPOINT 11 - Reservas por usuario
+  Metodo : GET
+  URL    : http://localhost:8000/api/reservas/usuario/{email}
+  HTTP   : 200 OK
+
+ENDPOINT 12 - Crear reserva
+  Metodo : POST
+  URL    : http://localhost:8000/api/reservas
+  Body   : { "email_usuario":"...", "nombre_usuario":"...",
+             "destino_id":1, "fecha_viaje":"2026-12-15",
+             "cantidad_personas":2, "observaciones":"..." }
+  HTTP   : 201 Created / 400 Bad Request
+
+ENDPOINT 13 - Actualizar estado de reserva
+  Metodo : PUT
+  URL    : http://localhost:8000/api/reservas/{id}/estado
+  Body   : { "estado": "CONFIRMADA" }
+  Estados: PENDIENTE, CONFIRMADA, COMPLETADA, CANCELADA
+  HTTP   : 200 OK / 400 Bad Request
+
+ENDPOINT 14 - Eliminar reserva
+  Metodo : DELETE
+  URL    : http://localhost:8000/api/reservas/{id}
+  Nota   : Solo reservas en estado CANCELADA
+  HTTP   : 200 OK / 400 Bad Request
+
+=====================================================
+ INSTRUCCIONES PARA EJECUTAR
+=====================================================
+1. Iniciar Laragon (MySQL activo)
+2. CMD: cd conociendo-api
+3. CMD: php artisan serve
+4. Verificar: GET http://localhost:8000/api/auth/estado
+=====================================================
