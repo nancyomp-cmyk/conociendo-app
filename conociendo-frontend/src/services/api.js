@@ -1,91 +1,38 @@
 // =====================================================
 // Archivo: api.js
-// Proyecto: Conociendo.com - Frontend React
-// Descripcion: Funciones de autenticacion con localStorage
-//              No requiere conexion con el backend
-// Evidencia: GA7-220501096-AA4-EV03
+// Proyecto: Conociendo.com - Modulos Integrados
+// Descripcion: Conexion real con el API REST Laravel
+//              Backend: http://localhost:8000/api
 // =====================================================
 
-/**
- * Simula el registro de un usuario guardando en localStorage.
- * En produccion se conectaria al API REST del backend.
- */
-export const registrarUsuario = (datos) => {
-  return new Promise((resolve, reject) => {
-    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]')
-    const existe = usuarios.find(u => u.email === datos.email)
+import axios from 'axios'
 
-    if (existe) {
-      reject({ response: { status: 409 } })
-      return
-    }
+// Instancia de Axios apuntando al backend Laravel
+const API = axios.create({
+  baseURL: 'http://localhost:8000/api',
+  headers: { 'Content-Type': 'application/json' }
+})
 
-    const nuevoUsuario = { ...datos, id: Date.now() }
-    usuarios.push(nuevoUsuario)
-    localStorage.setItem('usuarios', JSON.stringify(usuarios))
+// ── AUTENTICACION ─────────────────────────────────
+export const registrarUsuario = (datos) =>
+  API.post('/auth/registro', datos)
 
-    resolve({ data: { exitoso: true, mensaje: 'Registro exitoso. ¡Bienvenida a Conociendo.com!', nombre: datos.nombre, email: datos.email } })
-  })
-}
+export const loginUsuario = (credenciales) =>
+  API.post('/auth/login', credenciales)
 
-/**
- * Simula el inicio de sesion verificando en localStorage.
- */
-export const loginUsuario = (credenciales) => {
-  return new Promise((resolve, reject) => {
-    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]')
-    const usuario = usuarios.find(
-      u => u.email === credenciales.email && u.password === credenciales.password
-    )
+// ── DESTINOS ──────────────────────────────────────
+export const obtenerDestinos = () =>
+  API.get('/destinos')
 
-    if (usuario) {
-      resolve({ data: { exitoso: true, mensaje: 'Autenticación satisfactoria. ¡Bienvenida!', nombre: usuario.nombre, email: usuario.email } })
-    } else {
-      reject({ response: { status: 401 } })
-    }
-  })
-}
+export const obtenerDestinoPorId = (id) =>
+  API.get(`/destinos/${id}`)
 
-/**
- * Simula crear una reserva guardando en localStorage.
- */
-export const crearReserva = (datos) => {
-  return new Promise((resolve) => {
-    const reservas = JSON.parse(localStorage.getItem('reservas') || '[]')
-    const nuevaReserva = {
-      ...datos,
-      id: Date.now(),
-      codigoReserva: 'RES-' + Date.now(),
-      estado: 'PENDIENTE',
-      fechaReserva: new Date().toISOString()
-    }
-    reservas.push(nuevaReserva)
-    localStorage.setItem('reservas', JSON.stringify(reservas))
-    resolve({ data: nuevaReserva })
-  })
-}
+// ── RESERVAS ──────────────────────────────────────
+export const crearReserva = (datos) =>
+  API.post('/reservas', datos)
 
-/**
- * Obtiene las reservas de un usuario desde localStorage.
- */
-export const obtenerReservasPorUsuario = (email) => {
-  return new Promise((resolve) => {
-    const reservas = JSON.parse(localStorage.getItem('reservas') || '[]')
-    const misReservas = reservas.filter(r => r.emailUsuario === email)
-    resolve({ data: misReservas })
-  })
-}
+export const obtenerReservasPorUsuario = (email) =>
+  API.get(`/reservas/usuario/${email}`)
 
-/**
- * Cancela una reserva actualizando su estado en localStorage.
- */
-export const cancelarReserva = (id) => {
-  return new Promise((resolve) => {
-    const reservas = JSON.parse(localStorage.getItem('reservas') || '[]')
-    const actualizadas = reservas.map(r =>
-      r.id === id ? { ...r, estado: 'CANCELADA' } : r
-    )
-    localStorage.setItem('reservas', JSON.stringify(actualizadas))
-    resolve({ data: { estado: 'CANCELADA' } })
-  })
-}
+export const cancelarReserva = (id) =>
+  API.put(`/reservas/${id}/estado`, { estado: 'CANCELADA' })

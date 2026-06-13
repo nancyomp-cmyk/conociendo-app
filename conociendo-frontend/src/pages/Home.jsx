@@ -1,25 +1,50 @@
 // =====================================================
 // Archivo: Home.jsx
-// Proyecto: Conociendo.com - Frontend React
-// Descripcion: Pagina de inicio con datos estaticos
-// Evidencia: GA7-220501096-AA4-EV03
+// Proyecto: Conociendo.com - Modulos Integrados
+// Descripcion: Pagina de inicio conectada al API REST
+//              Laravel. Carga destinos desde la BD.
 // =====================================================
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import DestinoCard from '../components/DestinoCard'
-import { destinos, resenas } from '../data/mockData'
+import { obtenerDestinos } from '../services/api'
+import { resenas } from '../data/mockData'
 
 function Home() {
-  const [busqueda, setBusqueda] = useState('')
+  const [busqueda, setBusqueda]           = useState('')
+  const [destinos, setDestinos]           = useState([])
+  const [cargando, setCargando]           = useState(true)
+  const [error, setError]                 = useState(null)
   const navigate = useNavigate()
+
+  /**
+   * useEffect: al montar el componente llama al API de Laravel
+   * GET http://localhost:8000/api/destinos
+   * y guarda los destinos en el estado local
+   */
+  useEffect(() => {
+    const cargarDestinos = async () => {
+      try {
+        setCargando(true)
+        const respuesta = await obtenerDestinos()
+        setDestinos(respuesta.data)
+      } catch (err) {
+        console.error('Error al cargar destinos:', err)
+        setError('No se pudo conectar con el servidor.')
+      } finally {
+        setCargando(false)
+      }
+    }
+    cargarDestinos()
+  }, [])
 
   const handleBuscar = (e) => {
     e.preventDefault()
     navigate(`/destinos?busqueda=${busqueda}`)
   }
 
-  // Mostrar solo 6 destinos en el inicio
+  // Mostrar solo los primeros 6 destinos en el inicio
   const destinosDestacados = destinos.slice(0, 6)
 
   return (
@@ -62,11 +87,11 @@ function Home() {
             </div>
           </form>
 
-          {/* Estadisticas */}
+          {/* Estadisticas dinamicas usando datos reales del API */}
           <div className="row justify-content-center mt-5 g-4">
             {[
-              { num: `${destinos.length}+`, label: 'Destinos' },
-              { num: '5★',  label: 'Calificación' },
+              { num: cargando ? '...' : `${destinos.length}+`, label: 'Destinos' },
+              { num: '5★',   label: 'Calificación' },
               { num: '24/7', label: 'Soporte' },
               { num: '100%', label: 'Seguro' },
             ].map((s) => (
@@ -118,13 +143,45 @@ function Home() {
               Ver todos →
             </Link>
           </div>
-          <div className="row row-cols-1 row-cols-md-3 g-4">
-            {destinosDestacados.map(d => (
-              <div className="col" key={d.id}>
-                <DestinoCard destino={d} />
+
+          {/* Indicador de carga mientras el API responde */}
+          {cargando && (
+            <div className="text-center py-5">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Cargando...</span>
               </div>
-            ))}
-          </div>
+              <p className="mt-2 text-muted">Cargando destinos desde el servidor...</p>
+            </div>
+          )}
+
+          {/* Mensaje si el API no responde */}
+          {error && !cargando && (
+            <div className="alert alert-warning text-center">
+              <strong>⚠️ {error}</strong>
+              <br />
+              <small>Verifica que el backend Laravel esté corriendo en el puerto 8000.</small>
+            </div>
+          )}
+
+          {/* Grilla de destinos cargados desde la BD */}
+          {!cargando && !error && destinosDestacados.length > 0 && (
+            <div className="row row-cols-1 row-cols-md-3 g-4">
+              {destinosDestacados.map(d => (
+                <div className="col" key={d.id}>
+                  <DestinoCard destino={d} />
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Mensaje si no hay destinos en la BD */}
+          {!cargando && !error && destinosDestacados.length === 0 && (
+            <div className="text-center py-5">
+              <p className="text-muted fs-5">
+                No hay destinos disponibles en este momento.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -148,11 +205,13 @@ function Home() {
         </div>
       </section>
 
-      {/* ===== RESEÑAS ===== */}
+      {/* ===== RESEÑAS (datos estaticos mockData) ===== */}
       <section className="py-5 bg-light">
         <div className="container">
           <h2 className="text-center fw-bold mb-2">💬 Lo que dicen nuestros viajeros</h2>
-          <p className="text-center text-muted mb-5">Opiniones reales de personas que ya viajaron con nosotros</p>
+          <p className="text-center text-muted mb-5">
+            Opiniones reales de personas que ya viajaron con nosotros
+          </p>
           <div className="row g-4">
             {resenas.map(r => (
               <div className="col-md-4" key={r.id}>
@@ -183,9 +242,7 @@ function Home() {
       {/* ===== CTA FINAL ===== */}
       <section
         className="py-5 text-white text-center"
-        style={{
-          background: 'linear-gradient(135deg, #1a73e8, #0d47a1)'
-        }}
+        style={{ background: 'linear-gradient(135deg, #1a73e8, #0d47a1)' }}
       >
         <div className="container">
           <h2 className="fw-bold mb-3">¿Listo para tu próxima aventura?</h2>
