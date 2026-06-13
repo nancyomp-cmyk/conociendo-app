@@ -1,0 +1,33 @@
+=====================================================
+ ENLACE REPOSITORIO GITHUB
+ Proyecto: Conociendo.com - Modulos Integrados
+ Evidencia: GA8-220501096-AA1-EV01_02
+ Aprendiz: Nancy Mosquera
+=====================================================
+ 
+REPOSITORIO:
+https://github.com/nancyomp-cmyk/conociendo-app
+ 
+RAMA: main
+ 
+ULTIMO COMMIT:
+feat: integracion modulos Frontend React + Backend Laravel
+ 
+CONTENIDO:
+  conociendo-api/         <- Backend Laravel 11
+  conociendo-frontend/    <- Frontend React 18
+  iniciar-conociendo.bat  <- Script inicio rapido
+  README.md               <- Documentacion
+  .gitignore              <- Exclusiones
+ 
+URLS DEL SISTEMA (ambiente local):
+  Backend API  -> http://localhost:8000/api
+  Frontend Web -> http://localhost:5173
+ 
+PARA EJECUTAR:
+  Doble clic en iniciar-conociendo.bat
+  O manualmente:
+    CMD 1: cd conociendo-api && php artisan serve
+    CMD 2: cd conociendo-frontend && npm run dev
+=====================================================
+ 

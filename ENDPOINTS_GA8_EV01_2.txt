@@ -1,6 +1,6 @@
 =====================================================
  ENDPOINTS - API REST Conociendo.com
- Evidencia: GA8-220501096-AA1-EV01
+ Evidencia: GA8-220501096-AA1-EV01_02
  Aprendiz: Nancy Mosquera
  Tecnologia: Laravel 11 + PHP 8.2 + MySQL 8.4
  URL BASE: http://localhost:8000/api
