@@ -1,0 +1,40 @@
+# =====================================================
+# .gitignore - Conociendo.com
+# Proyecto: Backend Laravel + Frontend React
+# =====================================================
+
+# ── LARAVEL (Backend) ─────────────────────────────
+conociendo-api/vendor/
+conociendo-api/.env
+conociendo-api/.env.backup
+conociendo-api/storage/logs/*
+conociendo-api/storage/framework/cache/*
+conociendo-api/storage/framework/sessions/*
+conociendo-api/storage/framework/views/*
+conociendo-api/bootstrap/cache/*
+conociendo-api/public/hot
+conociendo-api/public/storage
+conociendo-api/.phpunit.result.cache
+conociendo-api/database/database.sqlite
+
+# ── REACT (Frontend) ──────────────────────────────
+conociendo-frontend/node_modules/
+conociendo-frontend/dist/
+conociendo-frontend/.env
+conociendo-frontend/.env.local
+conociendo-frontend/.env.production
+
+# ── SISTEMA OPERATIVO ─────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── EDITORES ──────────────────────────────────────
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# ── LOGS ──────────────────────────────────────────
+*.log
+npm-debug.log*
