@@ -1,9 +1,3 @@
-// =====================================================
-// Archivo: Registro.jsx
-// Proyecto: Conociendo.com - Frontend React
-// Descripcion: Pagina de registro de nuevos usuarios
-// Evidencia: GA7-220501096-AA4-EV03
-// =====================================================
 
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -46,12 +40,17 @@ function Registro() {
       const resp = await registrarUsuario({ nombre, email, password })
       const datos = resp.data
 
-      if (datos.exitoso) {
-        setExito('✅ ' + datos.mensaje + ' Redirigiendo al login...')
-        setTimeout(() => navigate('/login'), 2000)
-      } else {
-        setError('❌ ' + datos.mensaje)
-      }
+  if (datos.exitoso) {
+  // Guardar sesion automaticamente igual que hace el Login
+  localStorage.setItem('usuario', JSON.stringify({
+    nombre: datos.nombre,
+    email: datos.email
+  }))
+  setExito('✅ ' + datos.mensaje + ' Bienvenida!')
+  setTimeout(() => navigate('/'), 2000)
+} else {
+  setError('❌ ' + datos.mensaje)
+}
 
     } catch (err) {
       if (err.response?.status === 409) {

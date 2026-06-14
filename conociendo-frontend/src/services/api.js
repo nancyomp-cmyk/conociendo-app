@@ -9,7 +9,7 @@ import axios from 'axios'
 
 // Instancia de Axios apuntando al backend Laravel
 const API = axios.create({
-  baseURL: 'http://localhost:8000/api',
+  baseURL: 'https://darkorchid-mandrill-934066.hostingersite.com/api',
   headers: { 'Content-Type': 'application/json' }
 })
 

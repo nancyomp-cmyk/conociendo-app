@@ -44,3 +44,8 @@ npm-debug.log*
 *.docx
 *.doc
 *.pdf
+
+# ── ARCHIVOS COMPRIMIDOS ──────────────────────────
+*.zip
+*.rar
+
